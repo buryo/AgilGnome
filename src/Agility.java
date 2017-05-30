@@ -1,6 +1,4 @@
 import org.dreambot.api.methods.Calculations;
-import org.dreambot.api.methods.interactive.GameObjects;
-import org.dreambot.api.methods.map.Tile;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.methods.tabs.Tab;
 import org.dreambot.api.script.AbstractScript;
@@ -13,23 +11,21 @@ import org.dreambot.api.wrappers.interactive.GameObject;
 
 import java.awt.*;
 
+
 @ScriptManifest(name = "GnomeAgility70", author = "Laylaylom", description = "Gnome course", version = 1.0, category = Category.AGILITY)
 public class Agility extends AbstractScript {
 
     public Area arealog = new Area(2473, 3437, 2475, 3436, 0);
     public Area net1Area = new Area(2471, 3429, 2476, 3426, 0);
     public Area treebranchup = new Area(2471, 3424, 2476, 3422, 1);
-    public Area smallropearea = new Area(2476, 3420, 2477, 3419, 2);
     public Area ropearea = new Area(2472, 3421, 2477, 3419, 2);
     public Area treebranchdown = new Area(2483, 3420, 2488, 3422, 2);
-    public Area gotonet2Area = new Area(2483, 3425, 2488, 3424, 0);
     public Area net2area = new Area(2483, 3426, 2488, 3416, 0);
     public Area pipearea = new Area(2482, 3436, 2489, 3426, 0);
     public int laps;
     private Timer t = new Timer();
     private int startedSkill;
     int anti;
-
 
     @Override
     public void onStart() {
@@ -38,7 +34,7 @@ public class Agility extends AbstractScript {
     }
 
     public enum gnomeCourse{
-        LOG, NET1, TREEBRANCHUP, ROPE, TREEBRANCHDOWN, NET2, PIPE, GOTOSTART, ANTI;
+        LOG, NET1, TREEBRANCHUP, ROPE, TREEBRANCHDOWN, NET2, PIPE, ANTI;
         }
 
     private gnomeCourse getState(){
@@ -63,7 +59,7 @@ public class Agility extends AbstractScript {
         if(pipearea.contains(getLocalPlayer())){
             return gnomeCourse.PIPE;
         }
-        if (Calculations.random(45) == 1){
+        if (Calculations.random(40) == 1){
             return gnomeCourse.ANTI;
         }
         else{
@@ -181,11 +177,6 @@ public class Agility extends AbstractScript {
 
                 break;
 
-            case GOTOSTART:
-                sleep(Calculations.random(200,300));
-                getWalking().walk(arealog.getRandomTile());
-                sleepUntil(() -> arealog.contains(getLocalPlayer()), Calculations.random(5600, 6300));
-                break;
 
         }
 
@@ -197,13 +188,26 @@ public class Agility extends AbstractScript {
 
     }
 
+
     @Override
     public void onPaint(Graphics graphics) {
+        graphics.setColor(Color.WHITE);
+        graphics.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+        graphics.drawString("Written by Laylaylom", 370, 330);
+
+        graphics.setFont(new Font("Times New Roman", Font.BOLD, 24));
+        graphics.drawString("Gnome", 5, 238);
+        FontMetrics metrics = graphics.getFontMetrics();
+        int width = metrics.stringWidth("Gnome");
+        graphics.setColor(Color.RED);
+        graphics.drawString("Agility70", 5 + width, 238);
+
         graphics.setColor(Color.ORANGE);
-        graphics.drawString("State: " + getState().toString(), 5, 104);
-        graphics.drawString("Experience(p/h): " + getSkillTracker().getGainedExperience(Skill.AGILITY) + "( " + getSkillTracker().getGainedExperiencePerHour(Skill.AGILITY) + " )" , 5, 120);
-        graphics.drawString("Level (gained): " + getSkills().getRealLevel(Skill.AGILITY) + "( " + (getSkills().getRealLevel(Skill.AGILITY) - startedSkill) + " )", 5,136);
-        graphics.drawString("Time Running: " + t.formatTime(), 5, 152);
-        graphics.drawString("Total laps: " + laps, 5, 168);
+        graphics.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        graphics.drawString("State: " + getState().toString(), 5, 258);
+        graphics.drawString("Exp " + getSkillTracker().getGainedExperience(Skill.AGILITY) + " (" + getSkillTracker().getGainedExperiencePerHour(Skill.AGILITY) + "/hour)", 5, 276);
+        graphics.drawString("Level (gained): " + getSkills().getRealLevel(Skill.AGILITY) + "( " + (getSkills().getRealLevel(Skill.AGILITY) - startedSkill) + " )", 5,294);
+        graphics.drawString("Time Running: " + t.formatTime(), 5, 312);
+        graphics.drawString("Total laps: " + laps, 5, 330);
     }
 }
