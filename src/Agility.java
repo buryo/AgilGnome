@@ -25,7 +25,7 @@ public class Agility extends AbstractScript {
     public int laps;
     private Timer t = new Timer();
     private int startedSkill;
-    int anti;
+    int rand;
 
     @Override
     public void onStart() {
@@ -38,28 +38,28 @@ public class Agility extends AbstractScript {
         }
 
     private gnomeCourse getState(){
-        if(arealog.contains(getLocalPlayer())){
+        if(arealog.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.LOG;
         }
-        if(net1Area.contains(getLocalPlayer())) {
+        if(net1Area.contains(getLocalPlayer()) && rand != 1) {
             return gnomeCourse.NET1;
         }
-        if(treebranchup.contains(getLocalPlayer())){
+        if(treebranchup.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.TREEBRANCHUP;
         }
-        if(ropearea.contains(getLocalPlayer())){
+        if(ropearea.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.ROPE;
         }
-        if(treebranchdown.contains(getLocalPlayer())){
+        if(treebranchdown.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.TREEBRANCHDOWN;
         }
-        if(net2area.contains(getLocalPlayer())){
+        if(net2area.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.NET2;
         }
-        if(pipearea.contains(getLocalPlayer())){
+        if(pipearea.contains(getLocalPlayer()) && rand != 1){
             return gnomeCourse.PIPE;
         }
-        if (Calculations.random(40) == 1){
+        if (rand == 1){
             return gnomeCourse.ANTI;
         }
         else{
@@ -72,7 +72,7 @@ public class Agility extends AbstractScript {
     @Override
     public int onLoop() {
         int select1 = Calculations.random(0,4);
-        anti = Calculations.random(0, 10);
+        rand = Calculations.random(0, 12);
 
         switch (getState()) {
             case LOG:
@@ -80,7 +80,7 @@ public class Agility extends AbstractScript {
                 if (log != null){
                     if (log.isOnScreen()){
                         if (log.interact("Walk-across")){
-                            sleepUntil(() -> net1Area.contains(getLocalPlayer()), Calculations.random(9000, 9900));
+                            sleepUntil(() -> net1Area.contains(getLocalPlayer()), Calculations.random(9900, 11000));
                         }
                     }else{
                         getWalking().walk(arealog.getRandomTile());
@@ -162,7 +162,7 @@ public class Agility extends AbstractScript {
                     getTabs().open(Tab.STATS);
                     sleep(Calculations.random(400,600));
                     if (getSkills().hoverSkill(Skill.AGILITY)){
-                        sleep(Calculations.random(3400, 4900));
+                        sleep(Calculations.random(2100, 3100));
                     }
                     getTabs().open(Tab.INVENTORY);
                     break;
